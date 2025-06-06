@@ -2,13 +2,12 @@
 <html lang="en-US">
 <head>
     <title>MetalSlugFontReborn Results</title>
-    <link rel="stylesheet" href="/static/css/minified/results.css"/>
     <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/static/manifest.json" />
+    <link rel="manifest" href="/static/manifest.json">
     <script src="/static/js/minified/redirect.js"defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1e1e1e"/>
+    <meta name="theme-color" content="#1e1e1e">
     <meta name="description" content="A tool for creating images with the Metal Slug font.">
     <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
     <meta name="author" content="VermeilChan, SikroxMemer">
@@ -16,18 +15,24 @@
     <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
     <meta property="og:image" content="/static/assets/icons/logo.png">
     <meta property="og:url" content="https://vermeil.pythonanywhere.com/results">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            background-color: #111827;
+            color: #d1d5db;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <h1>Result</h1>
-
+<body class="min-h-screen flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-2xl bg-gray-800 shadow-2xl rounded-2xl p-6 space-y-6">
+        <h1 class="text-2xl font-bold text-white text-center">Result</h1>
         {% if output %}
-            <img id="image" src="{{ output }}" alt="Image"/>
-            <button id="download_button">
-                <a href="{{ output }}" download>Download</a>
-            </button>
+            <img id="image" src="{{ output }}" alt="Image" class="mx-auto rounded-lg shadow-lg" />
+            <div class="text-center">
+                <a href="{{ output }}" download class="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">Download</a>
+            </div>
         {% else %}
-            <p>No results were found. Return to the <a href="/">home page</a>.</p>
+            <p class="text-center text-red-400">No results were found. Return to the <a href="/" class="underline text-blue-400 hover:text-blue-300">home page</a>.</p>
         {% endif %}
     </div>
 </body>

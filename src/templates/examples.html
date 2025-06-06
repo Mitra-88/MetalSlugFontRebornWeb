@@ -2,12 +2,11 @@
 <html lang="en-US">
 <head>
     <title>MetalSlugFontReborn Examples</title>
-    <link rel="stylesheet" href="/static/css/minified/examples.css">
     <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/static/manifest.json" />
+    <link rel="manifest" href="/static/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1e1e1e"/>
+    <meta name="theme-color" content="#1e1e1e">
     <meta name="description" content="A tool for creating images with the Metal Slug font.">
     <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
     <meta name="author" content="VermeilChan, SikroxMemer">
@@ -15,24 +14,27 @@
     <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
     <meta property="og:image" content="/static/assets/icons/logo.png">
     <meta property="og:url" content="https://vermeil.pythonanywhere.com/examples">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            background-color: #111827;
+            color: #d1d5db;
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen px-4 py-8">
+    <div class="max-w-4xl mx-auto bg-gray-800 rounded-2xl p-6 space-y-8">
+        <h1 class="text-3xl font-bold text-white text-center">Metal Slug Font Examples</h1>
 
-<header>
-    <h1>Metal Slug Font Examples</h1>
-</header>
-
-<main>
-
-    <section>
-        <h2>Font 1</h2>
-        <ul>
-            <li><strong><span style="color: #8088b0;">Blue:</span></strong> <img src="/static/assets/examples/ms-font-1/Blue.png" width="348" height="32" alt="Font 1 Blue"> </li>
-            <li><strong><span style="color: #f89010;">Orange:</span></strong> <img src="/static/assets/examples/ms-font-1/Orange.png" width="348" height="32" alt="Font 1 Orange"></li>
-            <li><strong><span style="color: #e07000;">Gold:</span></strong> <img src="/static/assets/examples/ms-font-1/Gold.png" width="348" height="32" alt="Font 1 Gold"></li>
-        </ul>
-    </section>
-
+        <section class="space-y-4">
+            <h2 class="text-xl font-semibold text-white">Font 1</h2>
+            <ul class="space-y-2">
+                <li><strong><span style="color: #8088b0;">Blue:</span></strong> <img src="/static/assets/examples/ms-font-1/Blue.png" width="348" height="32" alt="Font 1 Blue"></li>
+                <li><strong><span style="color: #f89010;">Orange:</span></strong> <img src="/static/assets/examples/ms-font-1/Orange.png" width="348" height="32" alt="Font 1 Orange"></li>
+                <li><strong><span style="color: #e07000;">Gold:</span></strong> <img src="/static/assets/examples/ms-font-1/Gold.png" width="348" height="32" alt="Font 1 Gold"></li>
+            </ul>
+        </section>
+        
     <section>
         <h2>Font 2</h2>
         <ul>
@@ -65,8 +67,6 @@
             <li><strong><span style="color: #f86800;">Orange:</span></strong> <img src="/static/assets/examples/ms-font-5/Orange.png" width="380" height="38" alt="Font 5 Orange"></li>
         </ul>
     </section>
-
-</main>
 
 </body>
 </html>
