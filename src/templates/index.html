@@ -1,4 +1,24 @@
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>MetalSlugFontReborn</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="/static/manifest.json" />
+    <script src="/static/js/minified/fonts.js"defer></script>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1e1e1e"/>
+    <meta name="description" content="A tool for creating images with the Metal Slug font.">
+    <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
+    <meta name="author" content="VermeilChan, SikroxMemer">
+    <meta property="og:title" content="MetalSlugFontReborn">
+    <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
+    <meta property="og:image" content="/static/assets/icons/logo.png">
+    <meta property="og:url" content="https://vermeil.pythonanywhere.com/">
+    {% endblock %}
+</head>
 <style>
     html, body {
         font-family: 'Inter', sans-serif;
@@ -6,7 +26,6 @@
         color: #d1d5db;
     }
 </style>
-
 <body class="min-h-screen flex items-center justify-center px-4 py-8">
     {% block body %}
     <div class="w-full max-w-xl bg-gray-800 shadow-2xl rounded-2xl p-6 space-y-6 text-gray-200">
