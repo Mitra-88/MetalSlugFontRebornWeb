@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (fontSelect) {
         fontSelect.addEventListener('change', updateColorOptions);
+        updateColorOptions();
     }
 
     function updateColorOptions() {
