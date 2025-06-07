@@ -34,3 +34,27 @@ document.addEventListener("DOMContentLoaded", function () {
         colorSelect.innerHTML = colorOptions;
     }
 });
+
+function insertLineBreak() {
+    const input = document.getElementById("text-input");
+    const cursorPos = input.selectionStart;
+    const text = input.value;
+    const before = text.substring(0, cursorPos);
+    const after = text.substring(cursorPos);
+    input.value = before + "\n" + after;
+    input.selectionStart = input.selectionEnd = cursorPos + 1;
+    input.focus();
+}
+
+function toggleLineBreakOptions() {
+    const checkbox = document.getElementById("enable-line-breaks");
+    const container = document.getElementById("max-words-container");
+
+    if (checkbox.checked) {
+        container.style.opacity = "1";
+        container.style.pointerEvents = "auto";
+    } else {
+        container.style.opacity = "0";
+        container.style.pointerEvents = "none";
+    }
+}

@@ -23,6 +23,9 @@ def form():
             font = int(request.form["font"])
             color = request.form["color"]
 
+            if not text.strip():
+                return render_template("index.html", error="Text cannot be empty.")
+
             text = text.upper() if font == 5 else text
 
             font_paths = get_font_paths(font, color)

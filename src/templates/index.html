@@ -5,7 +5,7 @@
     <link href="/static/css/minified/tailwind.min.css" rel="stylesheet">
     <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="/static/manifest.json" />
-    <script src="/static/js/minified/fonts.js"defer></script>
+    <script src="/static/js/minified/fonts.js" defer></script>
     {% block head %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -42,15 +42,33 @@
         <h1 class="text-3xl font-bold text-center text-white">MetalSlugFontReborn</h1>
 
         <form id="form" action="/" method="post" class="space-y-4">
-            <input 
-                type="text" 
-                name="text" 
-                placeholder="Enter Text" 
-                required 
-                oninvalid="setCustomValidity('Please enter some text.')"
-                oninput="setCustomValidity('')" 
-                class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" 
-            />
+            <textarea
+                id="text-input"
+                name="text"
+                rows="4"
+                placeholder="Enter Text"
+                required
+                class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            ></textarea>
+
+            <div class="flex items-center space-x-4">
+                <label class="flex items-center space-x-2 text-sm cursor-pointer">
+                    <input type="checkbox" id="enable-line-breaks" name="enable-line-breaks" onclick="toggleLineBreakOptions()" />
+                    <span>Line breaks by word count</span>
+                </label>
+
+                <div id="max-words-container" class="flex items-center space-x-2 opacity-0 pointer-events-none transition-opacity duration-300">
+                    <label for="max-words" class="text-sm">Max Words Per Line</label>
+                    <input
+                        type="number"
+                        min="1"
+                        name="max-words"
+                        id="max-words"
+                        value="1"
+                        class="w-16 px-2 py-1 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+            </div>
 
             <select id="font" name="font" class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="1">Font 1</option>
@@ -81,10 +99,8 @@
                         <a href='/supported' class="underline text-blue-400 hover:text-blue-300">here</a>.
                     {% endif %}
                 </p>
-            {% else %}
-                {% if state %}
-                    <img id="image" src="{{ output }}" alt="Image" class="mx-auto mt-4 rounded-lg shadow-lg" />
-                {% endif %}
+            {% elif state %}
+                <img id="image" src="{{ output }}" alt="Image" class="mx-auto mt-4 rounded-lg shadow-lg" />
             {% endif %}
         </section>
 
@@ -95,3 +111,4 @@
     </div>
     {% endblock %}
 </body>
+</html>
