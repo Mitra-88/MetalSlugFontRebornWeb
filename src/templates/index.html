@@ -12,7 +12,7 @@
     <meta name="theme-color" content="#1e1e1e"/>
     <meta name="description" content="A tool for creating images with the Metal Slug font.">
     <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
-    <meta name="author" content="VermeilChan, SikroxMemer">
+    <meta name="author" content="Mitra88, SikroxMemer">
     <meta property="og:title" content="MetalSlugFontReborn">
     <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
     <meta property="og:image" content="/static/assets/icons/logo.png">
@@ -30,7 +30,7 @@
     {% block body %}
     <div class="w-full max-w-xl bg-gray-800 shadow-2xl rounded-2xl p-6 space-y-6 text-gray-200">
         <div class="flex justify-end">
-            <a href="https://github.com/VermeilChan/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/Mitra-88/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer">
                 <img src="/static/assets/icons/github.svg" alt="GitHub" class="w-8 h-8 hover:opacity-80 transition" />
             </a>
         </div>
@@ -45,16 +45,15 @@
             <textarea
                 id="text-input"
                 name="text"
-                rows="4"
                 placeholder="Enter Text"
                 required
-                class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                class="w-full h-12 px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             ></textarea>
 
             <div class="flex items-center space-x-4">
                 <label class="flex items-center space-x-2 text-sm cursor-pointer">
                     <input type="checkbox" id="enable-line-breaks" name="enable-line-breaks" onclick="toggleLineBreakOptions()" />
-                    <span>Line breaks by word count</span>
+                    <span>Automatic line breaks</span>
                 </label>
 
                 <div id="max-words-container" class="flex items-center space-x-2 opacity-0 pointer-events-none transition-opacity duration-300">
