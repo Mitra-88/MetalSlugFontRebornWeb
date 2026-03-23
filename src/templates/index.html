@@ -1,114 +1,143 @@
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-    <title>MetalSlugFontReborn</title>
-    <link href="/static/css/minified/tailwind.min.css" rel="stylesheet">
-    <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/static/manifest.json" />
-    <script src="/static/js/minified/fonts.js" defer></script>
-    {% block head %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1e1e1e"/>
-    <meta name="description" content="A tool for creating images with the Metal Slug font.">
-    <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
-    <meta name="author" content="VermeilChan, SikroxMemer">
-    <meta property="og:title" content="MetalSlugFontReborn">
-    <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
-    <meta property="og:image" content="/static/assets/icons/logo.png">
-    <meta property="og:url" content="https://vermeil.pythonanywhere.com/">
-    {% endblock %}
-</head>
-<style>
-    html, body {
-        font-family: 'Inter', sans-serif;
-        background-color: #111827;
-        color: #d1d5db;
-    }
-</style>
-<body class="min-h-screen flex items-center justify-center px-4 py-8">
-    {% block body %}
-    <div class="w-full max-w-xl bg-gray-800 shadow-2xl rounded-2xl p-6 space-y-6 text-gray-200">
-        <div class="flex justify-end">
-            <a href="https://github.com/VermeilChan/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer">
-                <img src="/static/assets/icons/github.svg" alt="GitHub" class="w-8 h-8 hover:opacity-80 transition" />
-            </a>
-        </div>
+{% extends "base.html" %}
 
-        <div class="flex justify-center">
-            <img src="/static/assets/icons/Raubtier.webp" alt="Raubtier" class="w-48 h-auto object-contain" />
-        </div>
+{% block title %}MetalSlugFontReborn{% endblock %}
 
-        <h1 class="text-3xl font-bold text-center text-white">MetalSlugFontReborn</h1>
+{% block head_extra %}
+<script src="/static/js/fonts.js" defer></script>
+{% endblock %}
 
-        <form id="form" action="/" method="post" class="space-y-4">
-            <textarea
-                id="text-input"
-                name="text"
-                rows="4"
-                placeholder="Enter Text"
-                required
-                class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            ></textarea>
+{% block content %}
+<section class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+    <div class="glass-panel rounded-[2rem] p-6 sm:p-8">
+        <div class="flex flex-col gap-8">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div class="max-w-2xl space-y-4">
+                    <span class="inline-flex items-center rounded-full bg-blue-500/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-blue-200">
+                        Retro arcade text generator
+                    </span>
+                    <div class="space-y-3">
+                        <h1 class="text-4xl font-black leading-tight text-white sm:text-5xl">Make every message look like it came straight out of Metal Slug.</h1>
+                        <p class="max-w-xl text-base leading-7 text-slate-300 sm:text-lg">Choose one of five font sets, match the right color palette, optionally wrap by word count, and download a ready-to-share image in seconds.</p>
+                    </div>
+                    <div class="flex flex-wrap gap-3 text-sm text-slate-300">
+                        <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">5 font families</div>
+                        <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">Dynamic color presets</div>
+                        <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">Instant image download</div>
+                    </div>
+                </div>
 
-            <div class="flex items-center space-x-4">
-                <label class="flex items-center space-x-2 text-sm cursor-pointer">
-                    <input type="checkbox" id="enable-line-breaks" name="enable-line-breaks" onclick="toggleLineBreakOptions()" />
-                    <span>Line breaks by word count</span>
-                </label>
-
-                <div id="max-words-container" class="flex items-center space-x-2 opacity-0 pointer-events-none transition-opacity duration-300">
-                    <label for="max-words" class="text-sm">Max Words Per Line</label>
-                    <input
-                        type="number"
-                        min="1"
-                        name="max-words"
-                        id="max-words"
-                        value="1"
-                        class="w-16 px-2 py-1 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
+                <div class="mx-auto flex justify-center lg:mx-0">
+                    <img src="/static/assets/icons/Raubtier.webp" alt="Metal Slug artwork preview" class="w-40 rounded-3xl border border-white/10 bg-slate-950/40 p-3 shadow-2xl sm:w-52" />
                 </div>
             </div>
 
-            <select id="font" name="font" class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="1">Font 1</option>
-                <option value="2">Font 2</option>
-                <option value="3">Font 3</option>
-                <option value="4">Font 4</option>
-                <option value="5">Font 5</option>
-            </select>
+            <form id="form" action="/" method="post" class="space-y-5 rounded-[1.75rem] border border-white/10 bg-slate-950/30 p-5 sm:p-6">
+                <div class="grid gap-2">
+                    <label for="text-input" class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">Text to render</label>
+                    <textarea
+                        id="text-input"
+                        name="text"
+                        rows="5"
+                        placeholder="Enter your message here"
+                        required
+                        class="w-full rounded-2xl border border-slate-600 bg-slate-900/80 px-4 py-3 text-base text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y"
+                    >{{ request.form.get('text', '') }}</textarea>
+                    <p class="text-sm text-slate-400">Tip: Font 5 automatically converts input to uppercase because that set only supports uppercase letters.</p>
+                </div>
 
-            <select id="color" name="color" class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="blue">Blue</option>
-                <option value="orange">Orange</option>
-                <option value="gold">Gold</option>
-            </select>
+                <div class="grid gap-4 md:grid-cols-2">
+                    <div class="grid gap-2">
+                        <label for="font" class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">Font style</label>
+                        <select id="font" name="font" data-selected="{{ request.form.get('font', '1') }}" class="w-full rounded-2xl border border-slate-600 bg-slate-900/80 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="1">Font 1</option>
+                            <option value="2">Font 2</option>
+                            <option value="3">Font 3</option>
+                            <option value="4">Font 4</option>
+                            <option value="5">Font 5</option>
+                        </select>
+                    </div>
 
-            <input 
-                type="submit" 
-                value="Generate" 
-                class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition" 
-            />
-        </form>
+                    <div class="grid gap-2">
+                        <label for="color" class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-300">Color palette</label>
+                        <select id="color" name="color" data-selected="{{ request.form.get('color', 'blue') }}" class="w-full rounded-2xl border border-slate-600 bg-slate-900/80 px-4 py-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="blue">Blue</option>
+                            <option value="orange">Orange</option>
+                            <option value="gold">Gold</option>
+                        </select>
+                    </div>
+                </div>
 
-        <section>
+                <div class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <label class="flex items-start gap-3 text-sm text-slate-200 cursor-pointer">
+                            <input type="checkbox" id="enable-line-breaks" name="enable-line-breaks" onclick="toggleLineBreakOptions()" class="mt-1 rounded border-slate-500 bg-slate-800 text-blue-500 focus:ring-blue-500" {% if request.form.get('enable-line-breaks') %}checked{% endif %} />
+                            <span>
+                                <span class="block font-semibold text-white">Wrap text by word count</span>
+                                <span class="text-slate-400">Use this when you want consistent multi-line titles without manually inserting line breaks.</span>
+                            </span>
+                        </label>
+
+                        <div id="max-words-container" class="flex items-center gap-3 rounded-xl bg-slate-950/50 px-3 py-2 transition-opacity duration-300 {% if request.form.get('enable-line-breaks') %}opacity-100{% else %}opacity-0 pointer-events-none{% endif %}">
+                            <label for="max-words" class="text-sm text-slate-300">Words per line</label>
+                            <input
+                                type="number"
+                                min="1"
+                                name="max-words"
+                                id="max-words"
+                                value="{{ request.form.get('max-words', 1) }}"
+                                class="w-20 rounded-xl border border-slate-600 bg-slate-900/80 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <button type="submit" class="inline-flex flex-1 items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-base font-semibold text-white transition hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-400">Generate image</button>
+                    <a href="/examples" class="inline-flex items-center justify-center rounded-2xl border border-white/10 bg-white/5 px-5 py-3 text-base font-semibold text-slate-100 transition hover:bg-white/10">Browse examples</a>
+                </div>
+            </form>
+
             {% if error %}
-                <p class="text-red-400 text-center">
-                    {{ error }}
-                    {% if unsupported == 'FileNotFoundError' %}
-                        <a href='/supported' class="underline text-blue-400 hover:text-blue-300">here</a>.
-                    {% endif %}
-                </p>
-            {% elif state %}
-                <img id="image" src="{{ output }}" alt="Image" class="mx-auto mt-4 rounded-lg shadow-lg" />
+                <section class="rounded-2xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-red-200">
+                    <p class="font-medium">{{ error }}{% if unsupported == 'FileNotFoundError' %} View the supported character guide <a href="/supported" class="underline decoration-red-300/60 underline-offset-4 hover:text-white">here</a>.{% endif %}</p>
+                </section>
             {% endif %}
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-6">
+        <section class="section-card rounded-[2rem] p-6">
+            <h2 class="text-xl font-bold text-white">How it works</h2>
+            <ol class="mt-4 space-y-3 text-sm leading-6 text-slate-300">
+                <li><span class="font-semibold text-blue-200">1.</span> Type the text you want to turn into a Metal Slug-style image.</li>
+                <li><span class="font-semibold text-blue-200">2.</span> Pick a font and color combination that matches the look you want.</li>
+                <li><span class="font-semibold text-blue-200">3.</span> Generate the image and download the result page output instantly.</li>
+            </ol>
         </section>
 
-        <section id="supported" class="text-sm text-gray-400 text-center space-y-2 pt-4 border-t border-gray-700">
-            <p><i>Check out the list of <a href="/supported" class="text-blue-400 hover:underline">supported characters</a> here.</i></p>
-            <p><i>View some <a href="/examples" class="text-blue-400 hover:underline">examples</a> here.</i></p>
+        <section class="section-card rounded-[2rem] p-6">
+            <h2 class="text-xl font-bold text-white">Quick links</h2>
+            <div class="mt-4 grid gap-3">
+                <a href="/supported" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 transition hover:bg-white/10">
+                    <p class="font-semibold text-white">Supported characters</p>
+                    <p class="mt-1 text-sm text-slate-400">Check exactly which letters, numbers, and symbols work in each font.</p>
+                </a>
+                <a href="/examples" class="rounded-2xl border border-white/10 bg-white/5 px-4 py-4 transition hover:bg-white/10">
+                    <p class="font-semibold text-white">Example gallery</p>
+                    <p class="mt-1 text-sm text-slate-400">Compare every font and color combination before generating your own.</p>
+                </a>
+            </div>
+        </section>
+
+        <section class="section-card rounded-[2rem] p-6">
+            <h2 class="text-xl font-bold text-white">Best for</h2>
+            <div class="mt-4 flex flex-wrap gap-2 text-sm">
+                <span class="rounded-full bg-blue-500/15 px-3 py-2 text-blue-100">Streaming overlays</span>
+                <span class="rounded-full bg-orange-500/15 px-3 py-2 text-orange-100">Fan art captions</span>
+                <span class="rounded-full bg-emerald-500/15 px-3 py-2 text-emerald-100">Retro UI mockups</span>
+                <span class="rounded-full bg-purple-500/15 px-3 py-2 text-purple-100">Social graphics</span>
+            </div>
         </section>
     </div>
-    {% endblock %}
-</body>
-</html>
+</section>
+{% endblock %}

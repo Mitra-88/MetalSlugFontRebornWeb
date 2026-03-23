@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="description" content="Create stylish Metal Slug-inspired text images right in your browser.">
+    <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
+    <meta name="author" content="VermeilChan, SikroxMemer">
+    <meta property="og:title" content="MetalSlugFontReborn">
+    <meta property="og:description" content="Create stylish Metal Slug-inspired text images right in your browser.">
+    <meta property="og:image" content="/static/assets/icons/logo.png">
+    <meta property="og:url" content="{{ request.base_url }}">
+    <title>{% block title %}MetalSlugFontReborn{% endblock %}</title>
+    <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="/static/manifest.json">
+    <link href="/static/css/minified/tailwind.min.css" rel="stylesheet">
+    {% block head_extra %}{% endblock %}
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top, rgba(59, 130, 246, 0.16), transparent 32%),
+                linear-gradient(180deg, #0f172a 0%, #111827 45%, #020617 100%);
+            color: #e5e7eb;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.82);
+            border: 1px solid rgba(148, 163, 184, 0.16);
+            box-shadow: 0 24px 80px rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(14px);
+        }
+
+        .section-card {
+            background: rgba(15, 23, 42, 0.74);
+            border: 1px solid rgba(148, 163, 184, 0.14);
+            box-shadow: 0 18px 55px rgba(2, 6, 23, 0.38);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="min-h-screen px-4 py-6 sm:px-6 lg:px-8">
+        <div class="mx-auto flex min-h-screen max-w-6xl flex-col gap-6">
+            <header class="glass-panel rounded-3xl px-5 py-4 sm:px-6">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <a href="/" class="flex items-center gap-3 text-white transition hover:opacity-90">
+                        <img src="/static/assets/icons/logo.png" alt="MetalSlugFontReborn logo" class="h-12 w-12 rounded-xl object-cover ring-1 ring-white/10">
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.3em] text-blue-300">Metal Slug Generator</p>
+                            <p class="text-lg font-semibold">MetalSlugFontReborn</p>
+                        </div>
+                    </a>
+
+                    <nav class="flex flex-wrap items-center gap-2 text-sm font-medium text-slate-200">
+                        <a href="/" class="rounded-full px-4 py-2 transition hover:bg-white/10">Generator</a>
+                        <a href="/examples" class="rounded-full px-4 py-2 transition hover:bg-white/10">Examples</a>
+                        <a href="/supported" class="rounded-full px-4 py-2 transition hover:bg-white/10">Supported Characters</a>
+                        <a href="https://github.com/VermeilChan/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer" class="rounded-full bg-blue-500/20 px-4 py-2 text-blue-200 transition hover:bg-blue-500/30">GitHub</a>
+                    </nav>
+                </div>
+            </header>
+
+            <main class="flex-1">
+                {% block content %}{% endblock %}
+            </main>
+
+            <footer class="px-2 pb-4 text-center text-sm text-slate-400">
+                <p>Built for quickly turning text into Metal Slug-style artwork with game-inspired presets and downloadable output.</p>
+            </footer>
+        </div>
+    </div>
+</body>
+</html>
