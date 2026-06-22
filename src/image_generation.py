@@ -45,10 +45,6 @@ def create_character_image(character, font_paths):
         f"The character '{character}' is not supported, please check the supported characters "
     )
 
-def compress_image(image_path):
-    with Image.open(image_path) as img:
-        img.save(image_path, optimize=True)
-
 def generate_image(text, filename, font_paths):
     lines = text.split("\n")
     all_chars = {c for line in lines for c in line if c != "\n"}
