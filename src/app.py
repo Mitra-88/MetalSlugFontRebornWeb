@@ -23,9 +23,6 @@ def form():
             font = int(request.form["font"])
             color = request.form["color"]
 
-            enable_line_breaks = "enable-line-breaks" in request.form
-            max_words = int(request.form.get("max-words", 1))
-
             if not text.strip():
                 return render_template("index.html", error="Text cannot be empty.")
 
@@ -33,10 +30,9 @@ def form():
 
             font_paths = get_font_paths(font, color)
 
-            max_words_param = max_words if enable_line_breaks else None
 
             filename = generate_filename()
-            image_url, _ = generate_image(text, filename, font_paths, max_words=max_words_param)
+            image_url, _ = generate_image(text, filename, font_paths)
 
             return redirect(url_for("result", output=image_url))
 
