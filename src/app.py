@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, redirect, url_for
-from image_generation import generate_image, generate_filename, get_font_paths
+import base64
+from flask import Flask, render_template, request
+from image_generation import generate_image, get_font_paths
 
 app = Flask(__name__)
 
@@ -18,23 +19,23 @@ def examples():
 @app.route("/", methods=["POST"])
 def form():
     try:
-        if request.method == "POST":
-            text = request.form["text"]
-            font = int(request.form["font"])
-            color = request.form["color"]
+        text = request.form["text"]
+        font = int(request.form["font"])
+        color = request.form["color"]
 
-            if not text.strip():
-                return render_template("index.html", error="Text cannot be empty.")
+        if not text.strip():
+            return render_template("index.html", error="Text cannot be empty.")
 
-            text = text.upper() if font == 5 else text
+        text = text.upper() if font == 5 else text
 
-            font_paths = get_font_paths(font, color)
+        font_paths = get_font_paths(font, color)
 
+        raw_img_bytes, _ = generate_image(text, font_paths)
 
-            filename = generate_filename()
-            image_url, _ = generate_image(text, filename, font_paths)
+        encoded_img = base64.b64encode(raw_img_bytes).decode("utf-8")
+        data_url = f"data:image/png;base64,{encoded_img}"
 
-            return redirect(url_for("result", output=image_url))
+        return render_template("results.html", output=data_url)
 
     except FileNotFoundError as error:
         return render_template(

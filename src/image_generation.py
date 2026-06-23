@@ -1,4 +1,4 @@
-from uuid import uuid4
+import io
 from pathlib import Path
 from PIL import Image
 from special_characters import special_characters
@@ -12,8 +12,6 @@ IMAGE_MODE = "RGBA"
 
 Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
 
-def generate_filename():
-    return f"{uuid4().hex}.png"
 
 def get_font_paths(font, color):
     base = Path("src/static/assets/fonts") / f"font-{font}" / f"ms-{color}"
@@ -36,14 +34,17 @@ def get_character_path(character, font_paths):
 
 def create_character_image(character, font_paths):
     if character.isspace():
-        return Image.new(IMAGE_MODE, (SPACE_CHARACTER_WIDTH, SPACE_CHARACTER_HEIGHT), TRANSPARENT_COLOR)
-    
+        return Image.new(
+            IMAGE_MODE,
+            (SPACE_CHARACTER_WIDTH, SPACE_CHARACTER_HEIGHT),
+            TRANSPARENT_COLOR,
+        )
+
     if (path := get_character_path(character, font_paths)) and path.is_file():
         return Image.open(path)
-    
-    raise FileNotFoundError(
-        f"The character '{character}' is not supported,"
-    )
+
+    raise FileNotFoundError(f"The character '{character}' is not supported,")
+
 
 def split_into_lines(text):
     lines = []
@@ -54,7 +55,7 @@ def split_into_lines(text):
             lines.append(paragraph)
     return lines
 
-def generate_image(text, filename, font_paths):
+def generate_image(text, font_paths):
     lines = split_into_lines(text)
     all_chars = {c for line in lines for c in line if c != "\n"}
     char_images = {char: create_character_image(char, font_paths) for char in all_chars}
@@ -69,17 +70,17 @@ def generate_image(text, filename, font_paths):
             line_images.append(line_img)
             total_height += line_height
             continue
-            
+
         line_width = sum(char_images[c].width for c in line)
         line_height = max(char_images[c].height for c in line) if line else 0
         line_img = Image.new(IMAGE_MODE, (line_width, line_height), TRANSPARENT_COLOR)
-        
+
         x = 0
         for char in line:
             img = char_images[char]
             line_img.paste(img, (x, line_height - img.height), img)
             x += img.width
-        
+
         line_images.append(line_img)
         max_width = max(max_width, line_width)
         total_height += line_height
@@ -90,12 +91,8 @@ def generate_image(text, filename, font_paths):
         final_image.paste(img, (0, y), img)
         y += img.height
 
-    image_directory = Path("src/static/generated-images")
-    image_directory.mkdir(parents=True, exist_ok=True)
+    img_io = io.BytesIO()
+    final_image.save(img_io, format="PNG", optimize=True, compress_level=9)
+    img_io.seek(0)
 
-    image_path = image_directory / filename
-    final_image.save(image_path, optimize=True)
-
-    image_url = f"/static/generated-images/{filename}"
-
-    return image_url, None
+    return img_io.getvalue(), None
