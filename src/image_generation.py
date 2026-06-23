@@ -42,11 +42,20 @@ def create_character_image(character, font_paths):
         return Image.open(path)
     
     raise FileNotFoundError(
-        f"The character '{character}' is not supported, please check the supported characters "
+        f"The character '{character}' is not supported,"
     )
 
+def split_into_lines(text):
+    lines = []
+    for paragraph in text.split("\n"):
+        if not paragraph.split():
+            lines.append("\n")
+        else:
+            lines.append(paragraph)
+    return lines
+
 def generate_image(text, filename, font_paths):
-    lines = text.split("\n")
+    lines = split_into_lines(text)
     all_chars = {c for line in lines for c in line if c != "\n"}
     char_images = {char: create_character_image(char, font_paths) for char in all_chars}
 
@@ -54,7 +63,7 @@ def generate_image(text, filename, font_paths):
     max_width = total_height = 0
 
     for line in lines:
-        if not line:
+        if line == "\n":
             line_height = EMPTY_LINE_HEIGHT
             line_img = Image.new(IMAGE_MODE, (1, line_height), TRANSPARENT_COLOR)
             line_images.append(line_img)
@@ -62,7 +71,7 @@ def generate_image(text, filename, font_paths):
             continue
             
         line_width = sum(char_images[c].width for c in line)
-        line_height = max(char_images[c].height for c in line)
+        line_height = max(char_images[c].height for c in line) if line else 0
         line_img = Image.new(IMAGE_MODE, (line_width, line_height), TRANSPARENT_COLOR)
         
         x = 0
