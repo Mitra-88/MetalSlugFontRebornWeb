@@ -12,7 +12,6 @@ IMAGE_MODE = "RGBA"
 
 Image.MAX_IMAGE_PIXELS = MAX_IMAGE_PIXELS
 
-
 def get_font_paths(font, color):
     base = Path("src/static/assets/fonts") / f"font-{font}" / f"ms-{color}"
     return {
@@ -44,7 +43,6 @@ def create_character_image(character, font_paths):
         return Image.open(path)
 
     raise FileNotFoundError(f"The character '{character}' is not supported,")
-
 
 def split_into_lines(text):
     lines = []
@@ -92,7 +90,7 @@ def generate_image(text, font_paths):
         y += img.height
 
     img_io = io.BytesIO()
-    final_image.save(img_io, format="PNG", optimize=True, compress_level=9)
+    final_image.save(img_io, format="PNG", optimize=True)
     img_io.seek(0)
 
     return img_io.getvalue(), None
