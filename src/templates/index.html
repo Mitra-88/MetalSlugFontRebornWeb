@@ -2,92 +2,103 @@
 <html lang="en-US">
 <head>
     <title>MetalSlugFontReborn</title>
-    <link href="/static/css/minified/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/index.css">
     <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="/static/manifest.json" />
     <script src="/static/js/minified/fonts.js" defer></script>
     {% block head %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1e1e1e"/>
+    <meta name="theme-color" content="#090d17" />
     <meta name="description" content="A tool for creating images with the Metal Slug font.">
     <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
-    <meta name="author" content="Mitra88, SikroxMemer">
+    <meta name="author" content="Mitra88, AmbitiousFlowDev">
     <meta property="og:title" content="MetalSlugFontReborn">
     <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
     <meta property="og:image" content="/static/assets/icons/logo.png">
     <meta property="og:url" content="https://vermeil.pythonanywhere.com/">
     {% endblock %}
 </head>
-<style>
-    html, body {
-        font-family: 'Inter', sans-serif;
-        background-color: #111827;
-        color: #d1d5db;
-    }
-</style>
-<body class="min-h-screen flex items-center justify-center px-4 py-8">
+<body>
     {% block body %}
-    <div class="w-full max-w-xl bg-gray-800 shadow-2xl rounded-2xl p-6 space-y-6 text-gray-200">
-        <div class="flex justify-end">
-            <a href="https://github.com/Mitra-88/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer">
-                <img src="/static/assets/icons/github.svg" alt="GitHub" class="w-8 h-8 hover:opacity-80 transition" />
-            </a>
-        </div>
+    <div class="github-link">
+        <a href="https://github.com/Mitra-88/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer">
+            <img src="/static/assets/icons/github.svg" alt="GitHub" />
+            Source
+        </a>
+    </div>
 
-        <div class="flex justify-center">
-            <img src="/static/assets/icons/Raubtier.webp" alt="Raubtier" class="w-48 h-auto object-contain" />
-        </div>
+    <div class="page">
+        <img class="mascot" src="/static/assets/icons/Raubtier.webp" alt="Raubtier mascot" />
 
-        <h1 class="text-3xl font-bold text-center text-white">MetalSlugFontReborn</h1>
+        <h1 class="title">Metal<span>Slug</span>FontReborn</h1>
 
-        <form id="form" action="/" method="post" class="space-y-4">
-            <textarea
-                id="text-input"
-                name="text"
-                placeholder="Enter Text"
-                required
-                class="w-full h-12 px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-            ></textarea>
+        <div class="card">
+            <div class="card-inner"></div>
 
-            <select id="font" name="font" class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="1">Font 1</option>
-                <option value="2">Font 2</option>
-                <option value="3">Font 3</option>
-                <option value="4">Font 4</option>
-                <option value="5">Font 5</option>
-            </select>
+            <form id="form" action="/" method="post" novalidate>
 
-            <select id="color" name="color" class="w-full px-4 py-2 border border-gray-600 bg-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="blue">Blue</option>
-                <option value="orange">Orange</option>
-                <option value="gold">Gold</option>
-            </select>
+                <div>
+                    <label class="field-label" for="text-input">Mission text</label>
+                    <textarea
+                    id="text-input"
+                    name="text"
+                    placeholder="Enter text here"
+                    required
+                    ></textarea>
+                    <span class="custom-error-msg">Mission text cannot be empty!</span>
+                </div>
 
-            <input 
-                type="submit" 
-                value="Generate" 
-                class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-700 transition" 
-            />
-        </form>
+                <div class="field-row">
+                    <div>
+                        <label class="field-label" for="font">Font variant</label>
+                        <select id="font" name="font">
+                            <option value="1">Font 1</option>
+                            <option value="2">Font 2</option>
+                            <option value="3">Font 3</option>
+                            <option value="4">Font 4</option>
+                            <option value="5">Font 5</option>
+                        </select>
+                    </div>
 
-        <section>
-            {% if error %}
-                <p class="text-red-400 text-center">
+                    <div>
+                        <label class="field-label" for="color">Color</label>
+                        <select id="color" name="color">
+                            <option value="blue">Blue</option>
+                            <option value="orange">Orange</option>
+                            <option value="gold">Gold</option>
+                        </select>
+                    </div>
+                </div>
+
+                <input type="submit" value="Generate Image" />
+
+            </form>
+
+            <section class="output-section">
+                {% if error %}
+                <div class="divider"></div>
+                <p class="error-msg">
                     {{ error }}
                     {% if unsupported == 'FileNotFoundError' %}
-                        <a href='/supported' class="underline text-blue-400 hover:text-blue-300">here</a>.
+                    See supported characters <a href='/supported'>here</a>.
                     {% endif %}
                 </p>
-            {% elif state %}
-                <img id="image" src="{{ output }}" alt="Image" class="mx-auto mt-4 rounded-lg shadow-lg" />
-            {% endif %}
+                {% elif state %}
+                <div class="divider"></div>
+                <img class="output-img" id="image" src="{{ output }}" alt="Generated Metal Slug text" />
+                {% endif %}
+            </section>
+        </div>
+
+        <section class="footer-links" id="supported">
+            <p>
+                <a href="/supported">Supported characters</a>
+                <span class="dot">·</span>
+                <a href="/examples">Browse examples</a>
+            </p>
         </section>
 
-        <section id="supported" class="text-sm text-gray-400 text-center space-y-2 pt-4 border-t border-gray-700">
-            <p><i>Check out the list of <a href="/supported" class="text-blue-400 hover:underline">supported characters</a> here.</i></p>
-            <p><i>View some <a href="/examples" class="text-blue-400 hover:underline">examples</a> here.</i></p>
-        </section>
     </div>
     {% endblock %}
 </body>

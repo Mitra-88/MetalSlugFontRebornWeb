@@ -2,71 +2,80 @@
 <html lang="en-US">
 <head>
     <title>MetalSlugFontReborn Examples</title>
+    <link rel="stylesheet" href="/static/css/examples.css">
     <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="/static/manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#1e1e1e">
+    <meta name="theme-color" content="#090d17">
     <meta name="description" content="A tool for creating images with the Metal Slug font.">
     <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
-    <meta name="author" content="VermeilChan, SikroxMemer">
+    <meta name="author" content="Mitra88, AmbitiousFlowDev">
     <meta property="og:title" content="MetalSlugFontReborn">
     <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
     <meta property="og:image" content="/static/assets/icons/logo.png">
     <meta property="og:url" content="https://vermeil.pythonanywhere.com/examples">
-    <link href="/static/css/minified/tailwind.min.css" rel="stylesheet">
-    <style>
-        html, body {
-            background-color: #111827;
-            color: #d1d5db;
-        }
-    </style>
 </head>
-<body class="min-h-screen px-4 py-8">
-    <div class="max-w-4xl mx-auto bg-gray-800 rounded-2xl p-6 space-y-8">
-        <h1 class="text-3xl font-bold text-white text-center">Metal Slug Font Examples</h1>
+<body>
+    <div class="page">
 
-        <section class="space-y-4">
-            <h2 class="text-xl font-semibold text-white">Font 1</h2>
-            <ul class="space-y-2">
-                <li><strong><span style="color: #8088b0;">Blue:</span></strong> <img src="/static/assets/examples/ms-font-1/Blue.png" width="348" height="32" alt="Font 1 Blue"></li>
-                <li><strong><span style="color: #f89010;">Orange:</span></strong> <img src="/static/assets/examples/ms-font-1/Orange.png" width="348" height="32" alt="Font 1 Orange"></li>
-                <li><strong><span style="color: #e07000;">Gold:</span></strong> <img src="/static/assets/examples/ms-font-1/Gold.png" width="348" height="32" alt="Font 1 Gold"></li>
-            </ul>
-        </section>
-        
-        <section class="space-y-4">
-            <h2 class="text-xl font-semibold text-white">Font 2</h2>
-            <ul class="space-y-2">
-            <li><strong><span style="color: #98a0c8;">Blue:</span></strong> <img src="/static/assets/examples/ms-font-2/Blue.png" width="316" height="32" alt="Font 2 Blue"></li>
-            <li><strong><span style="color: #f8a818;">Orange:</span></strong> <img src="/static/assets/examples/ms-font-2/Orange.png" width="316" height="32" alt="Font 2 Orange"></li>
-            <li><strong><span style="color: #f89010;">Gold:</span></strong> <img src="/static/assets/examples/ms-font-2/Gold.png" width="316" height="32" alt="Font 2 Gold"></li>
-        </ul>
-    </section>
+        <div class="back-link">
+            <a href="/">MetalSlugFontReborn</a>
+        </div>
 
-        <section class="space-y-4">
-            <h2 class="text-xl font-semibold text-white">Font 3</h2>
-            <ul class="space-y-2">
-            <li><strong><span style="color: #a098f8;">Blue:</span></strong> <img src="/static/assets/examples/ms-font-3/Blue.png" width="352" height="64" alt="Font 3 Blue"></li>
-            <li><strong><span style="color: #f89000;">Orange:</span></strong> <img src="/static/assets/examples/ms-font-3/Orange.png" width="352" height="64" alt="Font 3 Orange"></li>
-        </ul>
-    </section>
+        <h1>Font <span>Examples</span></h1>
 
-        <section class="space-y-4">
-            <h2 class="text-xl font-semibold text-white">Font 4</h2>
-            <ul class="space-y-2">
-            <li><strong><span style="color: #a098f8;">Blue:</span></strong> <img src="/static/assets/examples/ms-font-4/Blue.png" width="328" height="32" alt="Font 4 Blue"></li>
-            <li><strong><span style="color: #f89000;">Gold:</span></strong> <img src="/static/assets/examples/ms-font-4/Orange.png" width="328" height="32" alt="Font 4 Orange"></li>
-            <li><strong><span style="color: #f8f800;">Yellow:</span></strong> <img src="/static/assets/examples/ms-font-4/Yellow.png" width="328" height="32" alt="Font 4 Yellow"></li>
-        </ul>
-    </section>
+        <div class="card">
+            <div class="card-inner"></div>
 
-        <section class="space-y-4">
-            <h2 class="text-xl font-semibold text-white">Font 5</h2>
-            <ul class="space-y-2">
-            <li><strong><span style="color: #f86800;">Orange:</span></strong> <img src="/static/assets/examples/ms-font-5/Orange.png" width="380" height="38" alt="Font 5 Orange"></li>
-        </ul>
-    </section>
+            <section class="font-section">
+                <h2>Font 1</h2>
+                <ul>
+                    <li><span class="color-tag" data-color="blue">Blue</span> <img src="/static/assets/examples/ms-font-1/Blue.png" width="348" height="32" alt="Font 1 Blue"></li>
+                    <li><span class="color-tag" data-color="orange">Orange</span> <img src="/static/assets/examples/ms-font-1/Orange.png" width="348" height="32" alt="Font 1 Orange"></li>
+                    <li><span class="color-tag" data-color="gold">Gold</span> <img src="/static/assets/examples/ms-font-1/Gold.png" width="348" height="32" alt="Font 1 Gold"></li>
+                </ul>
+            </section>
 
+            <section class="font-section">
+                <h2>Font 2</h2>
+                <ul>
+                    <li><span class="color-tag" data-color="blue">Blue</span> <img src="/static/assets/examples/ms-font-2/Blue.png" width="316" height="32" alt="Font 2 Blue"></li>
+                    <li><span class="color-tag" data-color="orange">Orange</span> <img src="/static/assets/examples/ms-font-2/Orange.png" width="316" height="32" alt="Font 2 Orange"></li>
+                    <li><span class="color-tag" data-color="gold">Gold</span> <img src="/static/assets/examples/ms-font-2/Gold.png" width="316" height="32" alt="Font 2 Gold"></li>
+                </ul>
+            </section>
+
+            <section class="font-section">
+                <h2>Font 3</h2>
+                <ul>
+                    <li><span class="color-tag" data-color="blue">Blue</span> <img src="/static/assets/examples/ms-font-3/Blue.png" width="352" height="64" alt="Font 3 Blue"></li>
+                    <li><span class="color-tag" data-color="orange">Orange</span> <img src="/static/assets/examples/ms-font-3/Orange.png" width="352" height="64" alt="Font 3 Orange"></li>
+                </ul>
+            </section>
+
+            <section class="font-section">
+                <h2>Font 4</h2>
+                <ul>
+                    <li><span class="color-tag" data-color="blue">Blue</span> <img src="/static/assets/examples/ms-font-4/Blue.png" width="328" height="32" alt="Font 4 Blue"></li>
+                    <li><span class="color-tag" data-color="gold">Gold</span> <img src="/static/assets/examples/ms-font-4/Orange.png" width="328" height="32" alt="Font 4 Orange"></li>
+                    <li><span class="color-tag" data-color="yellow">Yellow</span> <img src="/static/assets/examples/ms-font-4/Yellow.png" width="328" height="32" alt="Font 4 Yellow"></li>
+                </ul>
+            </section>
+
+            <section class="font-section">
+                <h2>Font 5</h2>
+                <ul>
+                    <li><span class="color-tag" data-color="orange">Orange</span> <img src="/static/assets/examples/ms-font-5/Orange.png" width="380" height="38" alt="Font 5 Orange"></li>
+                </ul>
+            </section>
+
+        </div>
+
+        <div class="footer-links">
+            <p><a href="/">← Back to generator</a> <span class="dot">·</span> View <a href="/supported">supported characters</a></p>
+        </div>
+
+    </div>
 </body>
 </html>
