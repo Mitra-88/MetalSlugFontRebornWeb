@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MetalSlugFontReborn</title>
     <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/static/manifest.json" />
+    <link rel="manifest" href="/static/manifest.json">
     <script src="/static/js/fonts.js" defer></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#090d17" />
+    <meta name="theme-color" content="#090d17">
     <meta name="description" content="A tool for creating images with the Metal Slug font.">
     <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
     <meta name="author" content="Mitra88, AmbitiousFlowDev">
@@ -21,13 +21,13 @@
 <body>
     <div class="github-link">
         <a href="https://github.com/Mitra-88/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer">
-            <img src="/static/assets/icons/github.svg" alt="GitHub" />
+            <img src="/static/assets/icons/github.svg" alt="GitHub">
             Source
         </a>
     </div>
 
     <div class="page">
-        <img class="mascot" src="/static/assets/icons/Raubtier.webp" alt="Raubtier mascot" />
+        <img class="mascot" src="/static/assets/icons/Raubtier.webp" alt="Raubtier mascot">
         <h1 class="title">Metal<span>Slug</span>FontReborn</h1>
 
         <div class="card">
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <input type="submit" value="Generate Image" id="generate-btn" />
+                <input type="submit" value="Generate Image" id="generate-btn">
             </form>
 
             <section class="output-section" id="output-section" data-state="idle">
@@ -89,8 +89,7 @@
 
                 <div class="output-stage">
                     <div class="output-placeholder">
-                        <svg class="placeholder-icon" width="30" height="30" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <svg class="placeholder-icon" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <rect x="3" y="3" width="18" height="18" rx="2"/>
                             <circle cx="8.5" cy="8.5" r="1.5"/>
                             <path d="M21 15l-5-5L5 21"/>
@@ -103,7 +102,7 @@
                     <div class="output-result">
                         <p class="img-meta" id="img-meta"></p>
                         <div class="img-frame">
-                            <img class="output-img" id="result-img" alt="Generated Metal Slug text" />
+                            <img class="output-img" id="result-img" alt="Generated Metal Slug text">
                         </div>
                         <button class="download-btn" id="download-link" type="button">Download Image</button>
                     </div>
@@ -127,38 +126,40 @@
         "use strict";
 
         const $ = id => document.getElementById(id);
-
-        const form        = $("form");
-        const textInput   = $("text-input");
+        const form = $("form");
+        const textInput = $("text-input");
         const generateBtn = $("generate-btn");
-        const output      = $("output-section");
-        const resultImg   = $("result-img");
-        const errorMsg    = $("error-msg");
-        const imgMeta     = $("img-meta");
+        const output = $("output-section");
+        const resultImg = $("result-img");
+        const errorMsg = $("error-msg");
+        const imgMeta = $("img-meta");
         const downloadBtn = $("download-link");
-        const charCount   = $("char-count");
-        const compress    = $("compress");
+        const charCount = $("char-count");
+        const compress = $("compress");
         const compressVal = $("compress-val");
 
-        let abortCtrl  = null;
+        let abortCtrl = null;
         let debounceId = 0;
-        let blobUrl    = null;
+        let blobUrl = null;
 
         const setState = s => { output.dataset.state = s; };
 
-        function buildFD(preview) {
+        const buildFD = preview => {
             const fd = new FormData();
-            fd.set("text",     textInput.value);
-            fd.set("font",     $("font").value);
-            fd.set("color",    $("color").value);
-            fd.set("scale",    $("scale").value);
+            fd.set("text", textInput.value);
+            fd.set("font", $("font").value);
+            fd.set("color", $("color").value);
+            fd.set("scale", $("scale").value);
             fd.set("compress", preview ? "1" : compress.value);
             return fd;
-        }
+        };
 
-        function revokeBlob() {
-            if (blobUrl) { URL.revokeObjectURL(blobUrl); blobUrl = null; }
-        }
+        const revokeBlob = () => {
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+                blobUrl = null;
+            }
+        };
 
         async function generate() {
             if (!textInput.value.trim()) return;
@@ -182,17 +183,12 @@
                     revokeBlob();
                     blobUrl = URL.createObjectURL(blob);
 
-                    const w = res.headers.get("X-Image-Width")  || "?";
-                    const h = res.headers.get("X-Image-Height") || "?";
-
                     resultImg.src = blobUrl;
-                    imgMeta.textContent = `${w} × ${h} px`;
+                    imgMeta.textContent = `${res.headers.get("X-Image-Width") || "?"} × ${res.headers.get("X-Image-Height") || "?"} px`;
                     setState("success");
                 } else {
                     const d = await res.json().catch(() => ({}));
-                    errorMsg.innerHTML =
-                        (d.error || "Unknown error.") +
-                        (d.unsupported ? ' <a href="/supported">See supported characters.</a>' : "");
+                    errorMsg.innerHTML = (d.error || "Unknown error.") + (d.unsupported ? ' <a href="/supported">See supported characters.</a>' : "");
                     setState("error");
                 }
             } catch (e) {
@@ -213,11 +209,13 @@
 
             try {
                 const res = await fetch("/api/download", { method: "POST", body: buildFD(false) });
-                if (!res.ok) throw 0;
+                if (!res.ok) throw new Error("Download failed");
+                
                 const blob = await res.blob();
-                const url  = URL.createObjectURL(blob);
-                const a    = Object.assign(document.createElement("a"), {
-                    href: url, download: "metal-slug-generated.png"
+                const url = URL.createObjectURL(blob);
+                const a = Object.assign(document.createElement("a"), {
+                    href: url,
+                    download: "metal-slug-generated.png"
                 });
                 a.click();
                 URL.revokeObjectURL(url);
@@ -237,12 +235,17 @@
         textInput.addEventListener("input", () => {
             charCount.textContent = `${textInput.value.length} chars`;
             clearTimeout(debounceId);
-            if (!textInput.value.trim()) { setState("idle"); revokeBlob(); return; }
+            if (!textInput.value.trim()) {
+                setState("idle");
+                revokeBlob();
+                return;
+            }
             debounceId = setTimeout(generate, 350);
         });
 
-        for (const id of ["font", "color", "scale"])
+        for (const id of ["font", "color", "scale"]) {
             $(id).addEventListener("change", generate);
+        }
 
         compress.addEventListener("input", () => { compressVal.textContent = compress.value; });
         compress.addEventListener("change", generate);
