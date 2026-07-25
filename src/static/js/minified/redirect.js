@@ -1,1 +1,0 @@
-"reload"===performance.getEntriesByType("navigation")[0].type&&(window.location.href="/");
