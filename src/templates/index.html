@@ -2,11 +2,11 @@
 <html lang="en-US">
 <head>
     <title>MetalSlugFontReborn</title>
+    <link rel="stylesheet" href="/static/css/base.css">
     <link rel="stylesheet" href="/static/css/index.css">
     <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
     <link rel="manifest" href="/static/manifest.json" />
-    <script src="/static/js/minified/fonts.js" defer></script>
-    {% block head %}
+    <script src="/static/js/fonts.js" defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#090d17" />
@@ -17,10 +17,8 @@
     <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
     <meta property="og:image" content="/static/assets/icons/logo.png">
     <meta property="og:url" content="https://vermeil.pythonanywhere.com/">
-    {% endblock %}
 </head>
 <body>
-    {% block body %}
     <div class="github-link">
         <a href="https://github.com/Mitra-88/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer">
             <img src="/static/assets/icons/github.svg" alt="GitHub" />
@@ -34,18 +32,10 @@
         <h1 class="title">Metal<span>Slug</span>FontReborn</h1>
 
         <div class="card">
-            <div class="card-inner"></div>
-
-            <form id="form" action="/" method="post" novalidate>
-
+            <form id="form" action="/api/generate" method="post" novalidate onsubmit="return false;">
                 <div>
                     <label class="field-label" for="text-input">Mission text</label>
-                    <textarea
-                    id="text-input"
-                    name="text"
-                    placeholder="Enter text here"
-                    required
-                    ></textarea>
+                    <textarea id="text-input" name="text" placeholder="Enter text here" required></textarea>
                     <span class="custom-error-msg">Mission text cannot be empty!</span>
                 </div>
 
@@ -71,23 +61,14 @@
                     </div>
                 </div>
 
-                <input type="submit" value="Generate Image" />
-
+                <input type="submit" value="Generate Image" id="generate-btn" />
             </form>
 
             <section class="output-section">
-                {% if error %}
-                <div class="divider"></div>
-                <p class="error-msg">
-                    {{ error }}
-                    {% if unsupported == 'FileNotFoundError' %}
-                    See supported characters <a href='/supported'>here</a>.
-                    {% endif %}
-                </p>
-                {% elif state %}
-                <div class="divider"></div>
-                <img class="output-img" id="image" src="{{ output }}" alt="Generated Metal Slug text" />
-                {% endif %}
+                <div class="divider" id="divider" style="display:none;"></div>
+                <p class="error-msg" id="error-msg" style="display:none;"></p>
+                <img class="output-img" id="result-img" style="display:none;" alt="Generated Metal Slug text" />
+                <button class="download-btn" id="download-link" style="display:none;">Download Image</button>
             </section>
         </div>
 
@@ -98,8 +79,93 @@
                 <a href="/examples">Browse examples</a>
             </p>
         </section>
-
     </div>
-    {% endblock %}
+
+    <script>
+        const form = document.getElementById('form');
+        const generateBtn = document.getElementById('generate-btn');
+        const resultImg = document.getElementById('result-img');
+        const errorMsg = document.getElementById('error-msg');
+        const divider = document.getElementById('divider');
+        const downloadLink = document.getElementById('download-link');
+
+        async function generateImage() {
+            const formData = new FormData(form);
+            if (!formData.get('text').trim()) return;
+            
+            generateBtn.value = "Generating...";
+            generateBtn.disabled = true;
+            errorMsg.style.display = 'none';
+            resultImg.style.display = 'none';
+            downloadLink.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/generate', { method: 'POST', body: formData });
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    resultImg.src = url;
+                    resultImg.style.display = 'block';
+                    downloadLink.style.display = 'block';
+                    divider.style.display = 'block';
+                } else {
+                    const errData = await response.json();
+                    errorMsg.innerHTML = errData.error + (errData.unsupported ? ' <a href="/supported">See supported characters.</a>' : '');
+                    errorMsg.style.display = 'block';
+                    divider.style.display = 'block';
+                }
+            } catch (err) {
+                errorMsg.innerText = "Network error. Please try again.";
+                errorMsg.style.display = 'block';
+                divider.style.display = 'block';
+            } finally {
+                generateBtn.value = "Generate Image";
+                generateBtn.disabled = false;
+            }
+        }
+
+        generateBtn.addEventListener('click', generateImage);
+
+        async function downloadImage(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            if (!formData.get('text').trim()) return;
+
+            downloadLink.innerText = "Preparing...";
+            downloadLink.style.opacity = "0.6";
+
+            try {
+                const response = await fetch('/api/download', { method: 'POST', body: formData });
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'metal-slug-mission.png';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } else {
+                    alert("Failed to generate download.");
+                }
+            } catch (err) {
+                alert("Network error.");
+            } finally {
+                downloadLink.innerText = "Download Image";
+                downloadLink.style.opacity = "1";
+            }
+        }
+
+        downloadLink.addEventListener('click', downloadImage);
+
+        let debounceTimer;
+        document.getElementById('text-input').addEventListener('input', () => {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(generateImage, 300);
+        });
+        document.getElementById('color').addEventListener('change', generateImage);
+    </script>
 </body>
 </html>

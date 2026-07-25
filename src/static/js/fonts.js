@@ -32,5 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }).join('');
 
         colorSelect.innerHTML = colorOptions;
+        colorSelect.dispatchEvent(new Event('change'));
     }
 });

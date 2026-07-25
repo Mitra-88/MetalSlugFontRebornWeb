@@ -1,6 +1,6 @@
-import base64
-from flask import Flask, render_template, request
-from image_generation import generate_image, get_font_paths
+import io
+from flask import Flask, render_template, request, Response
+from image_generation import generate_image
 
 app = Flask(__name__)
 
@@ -16,39 +16,49 @@ def supported():
 def examples():
     return render_template("examples.html")
 
-@app.route("/", methods=["POST"])
-def form():
+@app.route("/api/generate", methods=["POST"])
+def api_generate():
     try:
-        text = request.form["text"]
-        font = int(request.form["font"])
-        color = request.form["color"]
+        text = request.form.get("text", "")
+        font = int(request.form.get("font", 1))
+        color = request.form.get("color", "blue")
 
         if not text.strip():
-            return render_template("index.html", error="Text cannot be empty.")
+            return {"error": "Text cannot be empty."}, 400
 
         text = text.upper() if font == 5 else text
-
-        font_paths = get_font_paths(font, color)
-
-        raw_img_bytes, _ = generate_image(text, font_paths)
-
-        encoded_img = base64.b64encode(raw_img_bytes).decode("utf-8")
-        data_url = f"data:image/png;base64,{encoded_img}"
-
-        return render_template("results.html", output=data_url)
+        raw_img_bytes, _ = generate_image(text, font, color, uncompressed=True)
+        
+        return Response(io.BytesIO(raw_img_bytes), mimetype="image/png")
 
     except FileNotFoundError as error:
-        return render_template(
-            "index.html", error=f"{error}", unsupported="FileNotFoundError"
+        return {"error": f"{error}", "unsupported": "FileNotFoundError"}, 404
+    except Exception as error:
+        return {"error": f"Error: {error}"}, 500
+
+@app.route("/api/download", methods=["POST"])
+def api_download():
+    try:
+        text = request.form.get("text", "")
+        font = int(request.form.get("font", 1))
+        color = request.form.get("color", "blue")
+
+        if not text.strip():
+            return {"error": "Text cannot be empty."}, 400
+
+        text = text.upper() if font == 5 else text
+        raw_img_bytes, _ = generate_image(text, font, color, uncompressed=False)
+
+        return Response(
+            io.BytesIO(raw_img_bytes), 
+            mimetype="image/png",
+            headers={"Content-Disposition": "attachment; filename=metal-slug-mission.png"}
         )
 
+    except FileNotFoundError as error:
+        return {"error": f"{error}", "unsupported": "FileNotFoundError"}, 404
     except Exception as error:
-        return render_template("index.html", error=f"Error: {error}")
-
-@app.route("/results")
-def result():
-    output = request.args.get("output")
-    return render_template("results.html", output=output)
+        return {"error": f"Error: {error}"}, 500
 
 if __name__ == "__main__":
     app.run()
