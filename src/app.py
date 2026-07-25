@@ -1,20 +1,24 @@
-import io
-from flask import Flask, render_template, request, Response
+import asyncio
+
+from flask import Flask, Response, render_template, request
+from PIL import Image
+
 from image_generation import generate_image
+
 
 def create_app():
     app = Flask(__name__)
 
     @app.get("/")
-    def index():
+    async def index():
         return render_template("index.html")
 
     @app.get("/supported")
-    def supported():
+    async def supported():
         return render_template("supported.html")
 
     @app.get("/examples")
-    def examples():
+    async def examples():
         return render_template("examples.html")
 
     def parse_params():
@@ -33,13 +37,15 @@ def create_app():
         text = text.upper() if font == 5 else text
         return (text, font, color, scale, compress_level), None
 
-    def generate_response(args, download=False):
+    async def generate_response(args, download=False):
         try:
-            raw_img_bytes, (w, h) = generate_image(*args)
+            raw_img_bytes, (w, h) = await asyncio.to_thread(generate_image, *args)
         except FileNotFoundError as e:
             return {"error": str(e), "unsupported": "FileNotFoundError"}, 404
         except ValueError as e:
             return {"error": str(e)}, 422
+        except Image.DecompressionBombError:
+            return {"error": "Image too large. Reduce text or scale."}, 422
 
         headers = {
             "X-Image-Width": str(w),
@@ -48,21 +54,21 @@ def create_app():
         if download:
             headers["Content-Disposition"] = "attachment; filename=metal-slug-generated.png"
 
-        return Response(io.BytesIO(raw_img_bytes), mimetype="image/png", headers=headers)
+        return Response(raw_img_bytes, mimetype="image/png", headers=headers)
 
     @app.post("/api/generate")
-    def api_generate():
+    async def api_generate():
         args, err = parse_params()
         if err:
             return err
-        return generate_response(args)
+        return await generate_response(args)
 
     @app.post("/api/download")
-    def api_download():
+    async def api_download():
         args, err = parse_params()
         if err:
             return err
-        return generate_response(args, download=True)
+        return await generate_response(args, download=True)
 
     return app
 

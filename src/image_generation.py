@@ -1,7 +1,9 @@
 import io
-from pathlib import Path
 from functools import lru_cache
+from pathlib import Path
+
 from PIL import Image
+
 from special_characters import special_characters
 
 Image.MAX_IMAGE_PIXELS = 16_000_000  # 4000×4000

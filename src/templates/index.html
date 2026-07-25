@@ -37,7 +37,7 @@
                     <textarea id="text-input" name="text" placeholder="Enter text here" required></textarea>
                     <div class="field-meta">
                         <span class="custom-error-msg" id="validation-msg">text cannot be empty!</span>
-                        <span class="char-count" id="char-count">0 chars</span>
+                        <span class="char-count" id="char-count">0 characters</span>
                     </div>
                 </div>
 
@@ -80,8 +80,6 @@
                         <div class="range-labels"><span>0 (fastest ⚡)</span><span>9 (smallest 📦)</span></div>
                     </div>
                 </div>
-
-                <input type="submit" value="Generate Image" id="generate-btn">
             </form>
 
             <section class="output-section" id="output-section" data-state="idle">
@@ -128,7 +126,6 @@
         const $ = id => document.getElementById(id);
         const form = $("form");
         const textInput = $("text-input");
-        const generateBtn = $("generate-btn");
         const output = $("output-section");
         const resultImg = $("result-img");
         const errorMsg = $("error-msg");
@@ -164,25 +161,22 @@
         async function generate() {
             if (!textInput.value.trim()) return;
 
+            const current = new AbortController();
             if (abortCtrl) abortCtrl.abort();
-            abortCtrl = new AbortController();
+            abortCtrl = current;
 
             setState("loading");
-            generateBtn.value = "Generating…";
-            generateBtn.disabled = true;
 
             try {
                 const res = await fetch("/api/generate", {
                     method: "POST",
                     body: buildFD(true),
-                    signal: abortCtrl.signal,
+                    signal: current.signal,
                 });
 
                 if (res.ok) {
-                    const blob = await res.blob();
                     revokeBlob();
-                    blobUrl = URL.createObjectURL(blob);
-
+                    blobUrl = URL.createObjectURL(await res.blob());
                     resultImg.src = blobUrl;
                     imgMeta.textContent = `${res.headers.get("X-Image-Width") || "?"} × ${res.headers.get("X-Image-Height") || "?"} px`;
                     setState("success");
@@ -195,9 +189,6 @@
                 if (e.name === "AbortError") return;
                 errorMsg.textContent = "Network error. Please try again.";
                 setState("error");
-            } finally {
-                generateBtn.value = "Generate Image";
-                generateBtn.disabled = false;
             }
         }
 
@@ -211,8 +202,7 @@
                 const res = await fetch("/api/download", { method: "POST", body: buildFD(false) });
                 if (!res.ok) throw new Error("Download failed");
                 
-                const blob = await res.blob();
-                const url = URL.createObjectURL(blob);
+                const url = URL.createObjectURL(await res.blob());
                 const a = Object.assign(document.createElement("a"), {
                     href: url,
                     download: "metal-slug-generated.png"
@@ -229,11 +219,10 @@
         }
 
         form.addEventListener("submit", e => e.preventDefault());
-        generateBtn.addEventListener("click", generate);
         downloadBtn.addEventListener("click", download);
 
         textInput.addEventListener("input", () => {
-            charCount.textContent = `${textInput.value.length} chars`;
+            charCount.textContent = `${textInput.value.length} characters`;
             clearTimeout(debounceId);
             if (!textInput.value.trim()) {
                 setState("idle");
