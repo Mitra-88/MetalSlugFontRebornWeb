@@ -28,15 +28,17 @@
 
     <div class="page">
         <img class="mascot" src="/static/assets/icons/Raubtier.webp" alt="Raubtier mascot" />
-
         <h1 class="title">Metal<span>Slug</span>FontReborn</h1>
 
         <div class="card">
-            <form id="form" action="/api/generate" method="post" novalidate onsubmit="return false;">
+            <form id="form" novalidate>
                 <div>
                     <label class="field-label" for="text-input">Mission text</label>
                     <textarea id="text-input" name="text" placeholder="Enter text here" required></textarea>
-                    <span class="custom-error-msg">Mission text cannot be empty!</span>
+                    <div class="field-meta">
+                        <span class="custom-error-msg">Mission text cannot be empty!</span>
+                        <span class="char-count" id="char-count">0 chars</span>
+                    </div>
                 </div>
 
                 <div class="field-row">
@@ -50,7 +52,6 @@
                             <option value="5">Font 5</option>
                         </select>
                     </div>
-
                     <div>
                         <label class="field-label" for="color">Color</label>
                         <select id="color" name="color">
@@ -61,18 +62,38 @@
                     </div>
                 </div>
 
+                <div class="field-row">
+                    <div>
+                        <label class="field-label" for="scale">Output scale</label>
+                        <select id="scale" name="scale">
+                            <option value="1" selected>1× (Native)</option>
+                            <option value="2">2×</option>
+                            <option value="3">3×</option>
+                            <option value="4">4×</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="field-label" for="compress">
+                            Compression: <output id="compress-val">6</output>
+                        </label>
+                        <input type="range" id="compress" name="compress" min="0" max="9" value="6" step="1">
+                        <div class="range-labels"><span>0 (fast)</span><span>9 (small)</span></div>
+                    </div>
+                </div>
+
                 <input type="submit" value="Generate Image" id="generate-btn" />
             </form>
 
             <section class="output-section">
                 <div class="divider" id="divider" style="display:none;"></div>
                 <p class="error-msg" id="error-msg" style="display:none;"></p>
+                <div class="img-meta" id="img-meta" style="display:none;"></div>
                 <img class="output-img" id="result-img" style="display:none;" alt="Generated Metal Slug text" />
                 <button class="download-btn" id="download-link" style="display:none;">Download Image</button>
             </section>
         </div>
 
-        <section class="footer-links" id="supported">
+        <section class="footer-links">
             <p>
                 <a href="/supported">Supported characters</a>
                 <span class="dot">·</span>
@@ -82,90 +103,148 @@
     </div>
 
     <script>
-        const form = document.getElementById('form');
-        const generateBtn = document.getElementById('generate-btn');
-        const resultImg = document.getElementById('result-img');
-        const errorMsg = document.getElementById('error-msg');
-        const divider = document.getElementById('divider');
-        const downloadLink = document.getElementById('download-link');
+    (() => {
+        "use strict";
 
-        async function generateImage() {
-            const formData = new FormData(form);
-            if (!formData.get('text').trim()) return;
-            
-            generateBtn.value = "Generating...";
+        const $ = id => document.getElementById(id);
+        const form = $("form");
+        const textInput = $("text-input");
+        const generateBtn = $("generate-btn");
+        const resultImg = $("result-img");
+        const errorMsg = $("error-msg");
+        const divider = $("divider");
+        const downloadLink = $("download-link");
+        const charCount = $("char-count");
+        const imgMeta = $("img-meta");
+        const compressSlider = $("compress");
+        const compressVal = $("compress-val");
+
+        let abortCtrl = null;
+        let debounceId = 0;
+        let lastBlobUrl = null;
+
+        // --- Helpers ---
+        function show(el) { el.style.display = ""; }
+        function hide(el) { el.style.display = "none"; }
+
+        function showError(msg, unsupported) {
+            errorMsg.innerHTML = msg + (unsupported ? ' <a href="/supported">See supported characters.</a>' : "");
+            show(errorMsg); show(divider);
+            hide(resultImg); hide(downloadLink); hide(imgMeta);
+        }
+
+        function clearOutput() {
+            hide(errorMsg); hide(resultImg); hide(downloadLink); hide(imgMeta); hide(divider);
+        }
+
+        function revokeLast() {
+            if (lastBlobUrl) { URL.revokeObjectURL(lastBlobUrl); lastBlobUrl = null; }
+        }
+
+        function buildFormData() {
+            const fd = new FormData();
+            fd.set("text", textInput.value);
+            fd.set("font", $("font").value);
+            fd.set("color", $("color").value);
+            fd.set("scale", $("scale").value);
+            fd.set("compress", compressSlider.value);
+            return fd;
+        }
+
+        // --- Generate ---
+        async function generate() {
+            const text = textInput.value;
+            if (!text.trim()) return;
+
+            // Cancel in-flight request
+            if (abortCtrl) abortCtrl.abort();
+            abortCtrl = new AbortController();
+
+            generateBtn.value = "Generating…";
             generateBtn.disabled = true;
-            errorMsg.style.display = 'none';
-            resultImg.style.display = 'none';
-            downloadLink.style.display = 'none';
+            clearOutput();
 
             try {
-                const response = await fetch('/api/generate', { method: 'POST', body: formData });
-                
-                if (response.ok) {
-                    const blob = await response.blob();
-                    const url = URL.createObjectURL(blob);
-                    resultImg.src = url;
-                    resultImg.style.display = 'block';
-                    downloadLink.style.display = 'block';
-                    divider.style.display = 'block';
+                const res = await fetch("/api/generate", {
+                    method: "POST",
+                    body: buildFormData(),
+                    signal: abortCtrl.signal,
+                });
+
+                if (res.ok) {
+                    const blob = await res.blob();
+                    revokeLast();
+                    lastBlobUrl = URL.createObjectURL(blob);
+
+                    const w = res.headers.get("X-Image-Width") || "?";
+                    const h = res.headers.get("X-Image-Height") || "?";
+
+                    resultImg.src = lastBlobUrl;
+                    imgMeta.textContent = `${w} × ${h} px`;
+                    show(resultImg); show(downloadLink); show(imgMeta); show(divider);
                 } else {
-                    const errData = await response.json();
-                    errorMsg.innerHTML = errData.error + (errData.unsupported ? ' <a href="/supported">See supported characters.</a>' : '');
-                    errorMsg.style.display = 'block';
-                    divider.style.display = 'block';
+                    const data = await res.json().catch(() => ({}));
+                    showError(data.error || "Unknown error.", data.unsupported);
                 }
-            } catch (err) {
-                errorMsg.innerText = "Network error. Please try again.";
-                errorMsg.style.display = 'block';
-                divider.style.display = 'block';
+            } catch (e) {
+                if (e.name === "AbortError") return; // superseded
+                showError("Network error. Please try again.");
             } finally {
                 generateBtn.value = "Generate Image";
                 generateBtn.disabled = false;
             }
         }
 
-        generateBtn.addEventListener('click', generateImage);
-
-        async function downloadImage(e) {
+        // --- Download ---
+        async function download(e) {
             e.preventDefault();
-            const formData = new FormData(form);
-            if (!formData.get('text').trim()) return;
+            if (!textInput.value.trim()) return;
 
-            downloadLink.innerText = "Preparing...";
+            downloadLink.textContent = "Preparing…";
             downloadLink.style.opacity = "0.6";
 
             try {
-                const response = await fetch('/api/download', { method: 'POST', body: formData });
-                if (response.ok) {
-                    const blob = await response.blob();
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'metal-slug-mission.png';
-                    document.body.appendChild(a);
-                    a.click();
-                    document.body.removeChild(a);
-                    URL.revokeObjectURL(url);
-                } else {
-                    alert("Failed to generate download.");
-                }
-            } catch (err) {
-                alert("Network error.");
+                const res = await fetch("/api/download", { method: "POST", body: buildFormData() });
+                if (!res.ok) throw new Error();
+                const blob = await res.blob();
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "metal-slug-mission.png";
+                a.click();
+                URL.revokeObjectURL(url);
+            } catch {
+                showError("Download failed. Try again.");
             } finally {
-                downloadLink.innerText = "Download Image";
+                downloadLink.textContent = "Download Image";
                 downloadLink.style.opacity = "1";
             }
         }
 
-        downloadLink.addEventListener('click', downloadImage);
+        // --- Events ---
+        generateBtn.addEventListener("click", generate);
+        downloadLink.addEventListener("click", download);
 
-        let debounceTimer;
-        document.getElementById('text-input').addEventListener('input', () => {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(generateImage, 300);
+        // Live char count
+        textInput.addEventListener("input", () => {
+            charCount.textContent = `${textInput.value.length} chars`;
+            clearTimeout(debounceId);
+            debounceId = setTimeout(generate, 350);
         });
-        document.getElementById('color').addEventListener('change', generateImage);
+
+        // Regenerate on control change
+        for (const id of ["font", "color", "scale"]) {
+            $(id).addEventListener("change", generate);
+        }
+
+        compressSlider.addEventListener("input", () => {
+            compressVal.textContent = compressSlider.value;
+        });
+        compressSlider.addEventListener("change", generate);
+
+        // Prevent native form submit
+        form.addEventListener("submit", e => e.preventDefault());
+    })();
     </script>
 </body>
 </html>
