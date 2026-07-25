@@ -63,8 +63,8 @@ def generate_image(text, font, color, scale=1, compress_level=6):
     max_width = total_height = 0
 
     for i, line in enumerate(lines):
+        line = line.strip()
         if not line:
-            line = line.strip()
             line_height = EMPTY_LINE_HEIGHT
             line_img = Image.new(IMAGE_MODE, (1, line_height), TRANSPARENT_COLOR)
             line_images.append(line_img)
@@ -93,7 +93,6 @@ def generate_image(text, font, color, scale=1, compress_level=6):
     w = max(1, max_width)
     h = max(1, total_height)
 
-    # Guard: check dimensions BEFORE scaling
     if w * scale > MAX_DIMENSION or h * scale > MAX_DIMENSION:
         raise ValueError(
             f"Output {w * scale}×{h * scale}px exceeds the {MAX_DIMENSION}×{MAX_DIMENSION}px limit. "
@@ -108,7 +107,6 @@ def generate_image(text, font, color, scale=1, compress_level=6):
         if i < len(line_images) - 1:
             y += LINE_SPACING
 
-    # Scale up with nearest-neighbor (pixel art)
     if scale > 1:
         final_image = final_image.resize((w * scale, h * scale), Image.NEAREST)
 

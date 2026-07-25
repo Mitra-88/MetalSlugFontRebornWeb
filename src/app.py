@@ -69,7 +69,7 @@ def api_download():
         return Response(
             io.BytesIO(raw_img_bytes),
             mimetype="image/png",
-            headers={"Content-Disposition": "attachment; filename=metal-slug-mission.png"},
+            headers={"Content-Disposition": "attachment; filename=metal-slug-generated.png"},
         )
     except FileNotFoundError as e:
         return {"error": str(e), "unsupported": "FileNotFoundError"}, 404
