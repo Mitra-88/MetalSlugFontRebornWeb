@@ -4,30 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MetalSlugFontReborn</title>
-    <link rel="stylesheet" href="/static/css/minified/base.css">
-    <link rel="stylesheet" href="/static/css/minified/index.css">
-    <link rel="icon" href="/static/assets/icons/favicon.ico" type="image/x-icon">
-    <link rel="manifest" href="/static/manifest.json">
-    <script src="/static/js/minified/fonts.js" defer></script>
+    <link rel="stylesheet" href="./static/css/minified/base.css">
+    <link rel="stylesheet" href="./static/css/minified/index.css">
+    <link rel="icon" href="./static/assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="manifest" href="./static/manifest.json">
+    <script src="./static/js/minified/fonts.js" defer></script>
     <meta name="theme-color" content="#090d17">
     <meta name="description" content="A tool for creating images with the Metal Slug font.">
     <meta name="keywords" content="Metal Slug, Metal Slug Font, Metal Slug Font Reborn">
     <meta name="author" content="Mitra88, AmbitiousFlowDev">
     <meta property="og:title" content="MetalSlugFontReborn">
     <meta property="og:description" content="A tool for creating images with the Metal Slug font.">
-    <meta property="og:image" content="/static/assets/icons/logo.png">
+    <meta property="og:image" content="./static/assets/icons/logo.png">
     <meta property="og:url" content="https://vermeil.pythonanywhere.com/">
 </head>
 <body>
     <div class="github-link">
         <a href="https://github.com/Mitra-88/MetalSlugFontRebornWeb" target="_blank" rel="noopener noreferrer">
-            <img src="/static/assets/icons/github.svg" alt="GitHub">
+            <img src="./static/assets/icons/github.svg" alt="GitHub">
             Source
         </a>
     </div>
 
     <div class="page">
-        <img class="mascot" src="/static/assets/icons/Raubtier.webp" alt="Raubtier mascot">
+        <img class="mascot" src="./static/assets/icons/Raubtier.webp" alt="Raubtier mascot">
         <h1 class="title">Metal<span>Slug</span>FontReborn</h1>
 
         <div class="card">
@@ -159,7 +159,7 @@
         const setState = s => { output.dataset.state = s; };
 
         function getCharPath(font, color, char) {
-            const base = `/static/assets/fonts/font-${font}/ms-${color}`;
+            const base = `./static/assets/fonts/font-${font}/ms-${color}`;
             if (char >= "a" && char <= "z") return `${base}/letters/lower-case/${char}.png`;
             if (char >= "A" && char <= "Z") return `${base}/letters/upper-case/${char}.png`;
             if (char >= "0" && char <= "9") return `${base}/numbers/${char}.png`;
