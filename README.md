@@ -4,7 +4,7 @@ Webapp version of [MetalSlugFontReborn](https://github.com/Mitra-88/MetalSlugFon
 
 ## 🚀 Demo
 
-Visit the live instance: [https://vermeil.pythonanywhere.com](https://vermeil.pythonanywhere.com)
+Visit the live instance: [https://vermeil.pythonanywhere.com](https://vermeil.pythonanywhere.com) or [https://metalslugfontrebornweb.mitra88dev.workers.dev/](https://metalslugfontrebornweb.mitra88dev.workers.dev/)
 
 ## 🛠️ Technology Stack
 
