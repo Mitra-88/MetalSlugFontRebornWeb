@@ -14,6 +14,13 @@ Visit the live instance: [https://vermeil.pythonanywhere.com](https://vermeil.py
 - Fast by construction: sprites decode once into GPU bitmaps via `createImageBitmap`, layouts are memoized per text, the rest of the font warms up during idle time, and a built-in sampling profiler shows render phase timings (load, layout, draw) with p50/p95 stats right in the preview panel.
 - Adaptive layout for desktop and mobile, no router, no server, ~18 KB gzipped of app code and CSS.
 
+## 🌿 Branches
+
+- `rewrite/solid-vite` — Solid 1.9, plain JavaScript. Stable line (this branch).
+- `rewrite/solid2` — Solid 2.0 RC (`solid-js@next` + `@solidjs/web@next`), TypeScript. Forward-looking port of the same app.
+
+Both share the same Material 3 UI, profiler and feature set; pick one, they are independent.
+
 ## 📁 Project Structure
 
 ```
