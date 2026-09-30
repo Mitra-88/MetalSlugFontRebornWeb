@@ -115,6 +115,7 @@ export default function Generator() {
     let canvas;
     let genId = 0;
     let debounceId = 0;
+    let lastVisualKey = "";
 
     const fontColors = createMemo(() => FONT_SUPPORT[font()].colors);
     const perfStats = createMemo(() => (sample() ? perf.stats() : null));
@@ -184,11 +185,15 @@ export default function Generator() {
                 setSample({ ...res.sample, phases: { ...res.sample.phases } });
             }
             preloadIdle(f, color());
-            if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-                canvas.animate?.(
-                    [{ opacity: 0.35, transform: "scale(0.985)" }, { opacity: 1, transform: "scale(1)" }],
-                    { duration: 200, easing: "cubic-bezier(0.05, 0.7, 0.1, 1)" }
-                );
+            const visualKey = `${f}|${color()}|${scale()}`;
+            if (visualKey !== lastVisualKey) {
+                lastVisualKey = visualKey;
+                if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+                    canvas.animate?.(
+                        [{ opacity: 0.35, transform: "scale(0.985)" }, { opacity: 1, transform: "scale(1)" }],
+                        { duration: 200, easing: "cubic-bezier(0.05, 0.7, 0.1, 1)" }
+                    );
+                }
             }
         }
     }
@@ -300,7 +305,7 @@ export default function Generator() {
                         <div class="m3-field" data-empty={text() === ""}>
                             <textarea id="text-input" placeholder=" " required value={text()} onInput={onTextInput} />
                             <label for="text-input">Your text</label>
-                            <span class="char-count" aria-live="polite">{text().length} characters</span>
+                            <span class="char-count" >{text().length} characters</span>
                         </div>
 
                         <div>
@@ -353,49 +358,43 @@ export default function Generator() {
                             role="img"
                             aria-label={`Rendered preview: ${text() || "nothing yet"}`}
                         />
-                        <Show when={status() === "loading"}>
-                            <div class="stage-overlay absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-surface-lowest/85 text-on-surface-variant">
-                                <div class="m3-progress" />
-                                <p class="text-body-m">
-                                    Fetching {loadingCount()} sprite{loadingCount() === 1 ? "" : "s"}
-                                </p>
+                        <div class="stage-overlay absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-surface-lowest/85 text-on-surface-variant" classList={{ visible: status() === "loading" }}>
+                            <div class="m3-progress" />
+                            <p class="text-body-m">
+                                Fetching {loadingCount()} sprite{loadingCount() === 1 ? "" : "s"}
+                            </p>
+                        </div>
+                        <div class="stage-overlay absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 text-center text-on-surface-variant" classList={{ visible: status() === "idle" }}>
+                            <div class="flex size-14 items-center justify-center rounded-2xl bg-surface-container">
+                                <Image size={24} />
                             </div>
-                        </Show>
-                        <Show when={status() === "idle"}>
-                            <div class="stage-overlay absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 text-center text-on-surface-variant">
-                                <div class="flex size-14 items-center justify-center rounded-2xl bg-surface-container">
-                                    <Image size={24} />
-                                </div>
-                                <p class="text-body-m">
-                                    Nothing here yet
-                                    <br />
-                                    <span class="text-body-s">Type on the left and the preview paints itself.</span>
-                                </p>
+                            <p class="text-body-m">
+                                Nothing here yet
+                                <br />
+                                <span class="text-body-s">Type on the left and the preview paints itself.</span>
+                            </p>
+                        </div>
+                        <div class="stage-overlay absolute inset-0 z-20 flex items-center justify-center bg-surface-lowest/85 p-4" classList={{ visible: status() === "error" }}>
+                            <div class="error-box max-w-md" role="alert">
+                                <span class="mr-1 inline-flex align-[-3px]">
+                                    <TriangleAlert size={18} />
+                                </span>
+                                {errorMsg()}
+                                <Show when={errorLink()}>
+                                    <a href="./supported.html">See supported characters</a>
+                                </Show>
+                                <Show when={errorKind() === "failed"}>
+                                    {" "}
+                                    <button
+                                        type="button"
+                                        class="cursor-pointer border-none bg-transparent p-0 font-semibold text-inherit underline underline-offset-2"
+                                        onClick={retryFailed}
+                                    >
+                                        Try again
+                                    </button>
+                                </Show>
                             </div>
-                        </Show>
-                        <Show when={status() === "error"}>
-                            <div class="stage-overlay absolute inset-0 z-20 flex items-center justify-center bg-surface-lowest/85 p-4">
-                                <div class="error-box max-w-md" role="alert">
-                                    <span class="mr-1 inline-flex align-[-3px]">
-                                        <TriangleAlert size={18} />
-                                    </span>
-                                    {errorMsg()}
-                                    <Show when={errorLink()}>
-                                        <a href="./supported.html">See supported characters</a>
-                                    </Show>
-                                    <Show when={errorKind() === "failed"}>
-                                        {" "}
-                                        <button
-                                            type="button"
-                                            class="cursor-pointer border-none bg-transparent p-0 font-semibold text-inherit underline underline-offset-2"
-                                            onClick={retryFailed}
-                                        >
-                                            Try again
-                                        </button>
-                                    </Show>
-                                </div>
-                            </div>
-                        </Show>
+                        </div>
                     </div>
 
                     <Show when={warning()}>

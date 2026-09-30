@@ -611,7 +611,7 @@ body {
 
 .m3-field .char-count {
     position: absolute;
-    right: 12px;
+    left: 16px;
     bottom: 8px;
     font-size: 0.72rem;
     color: var(--m3-on-surface-variant);
@@ -655,7 +655,26 @@ body {
 }
 
 .stage-overlay {
-    animation: overlay-in 220ms var(--ease-emphasized-decel);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 200ms var(--ease-emphasized-accel),
+        visibility 0s 200ms;
+}
+
+.stage-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+        opacity 220ms var(--ease-emphasized-decel),
+        visibility 0s;
+}
+
+.menu-in {
+    animation: menu-in 200ms var(--ease-emphasized-decel);
+    transform-origin: top right;
 }
 
 .pop-in {
@@ -784,10 +803,10 @@ body {
     }
 }
 
-@keyframes overlay-in {
+@keyframes menu-in {
     from {
         opacity: 0;
-        transform: scale(0.985);
+        transform: scale(0.85);
     }
 }
 
@@ -798,16 +817,8 @@ body {
     }
 }
 
-.theme-fade,
-.theme-fade *,
-.theme-fade *::before,
-.theme-fade *::after {
-    transition:
-        background-color 350ms var(--ease-standard),
-        color 350ms var(--ease-standard),
-        border-color 350ms var(--ease-standard),
-        fill 350ms var(--ease-standard),
-        stroke 350ms var(--ease-standard) !important;
+.material-icons-round {
+    user-select: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

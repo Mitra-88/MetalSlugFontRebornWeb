@@ -33,10 +33,12 @@ export function ColorDot(props) {
 }
 
 function withThemeTransition(apply) {
-    const root = document.documentElement;
-    root.classList.add("theme-fade");
-    apply();
-    setTimeout(() => root.classList.remove("theme-fade"), 450);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced || typeof document.startViewTransition !== "function") {
+        apply();
+        return;
+    }
+    document.startViewTransition(apply);
 }
 
 export function ThemeToggle() {
@@ -105,7 +107,7 @@ export function PaletteMenu() {
                 <Palette size={20} />
             </button>
             <Show when={open()}>
-                <div class="absolute right-0 top-12 z-50 w-48 rounded-xl bg-surface-container p-2 shadow-e2" role="menu">
+                <div class="menu-in absolute right-0 top-12 z-50 w-48 origin-top-right rounded-xl bg-surface-container p-2 shadow-e2" role="menu">
                     <For each={PALETTES}>
                         {(p) => (
                             <button
