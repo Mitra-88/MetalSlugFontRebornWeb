@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Mitra-88/MetalSlugFontRebornWeb#readme",
   "dependencies": {
-    "lucide-solid": "^1.49.0",
+    "material-icons": "^1.13.14",
     "solid-js": "^1.9.15"
   },
   "devDependencies": {

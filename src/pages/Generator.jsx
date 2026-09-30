@@ -1,5 +1,5 @@
 import { For, Show, createMemo, createSignal, onMount } from "solid-js";
-import { Activity, Check, ChevronDown, Download, Image, Info, TriangleAlert } from "lucide-solid";
+import { Activity, Check, ChevronDown, Download, Image, Info, TriangleAlert } from "../lib/icons.jsx";
 import { COLOR_HEX, Page, PaletteMenu, ThemeToggle } from "./../Page.jsx";
 import { FONT_SUPPORT, HARD_LIMIT, collectUnsupported } from "../lib/fonts.js";
 import {
@@ -77,11 +77,30 @@ function FieldLabel(props) {
     return <p class="mb-2 text-label-m text-on-surface-variant">{props.children}</p>;
 }
 
+const SETTINGS_KEY = "msfb-settings";
+
+function loadSettings() {
+    try {
+        const parsed = JSON.parse(localStorage.getItem(SETTINGS_KEY));
+        if (!parsed || typeof parsed !== "object") return {};
+        const font = ["1", "2", "3", "4", "5"].includes(parsed.font) ? parsed.font : "1";
+        const colors = FONT_SUPPORT[font].colors;
+        return {
+            font,
+            color: colors.includes(parsed.color) ? parsed.color : colors[0],
+            scale: [1, 2, 3, 4].includes(parsed.scale) ? parsed.scale : 1,
+        };
+    } catch {
+        return {};
+    }
+}
+
 export default function Generator() {
+    const saved = loadSettings();
     const [text, setText] = createSignal("");
-    const [font, setFont] = createSignal("1");
-    const [color, setColor] = createSignal("blue");
-    const [scale, setScale] = createSignal(1);
+    const [font, setFont] = createSignal(saved.font ?? "1");
+    const [color, setColor] = createSignal(saved.color ?? "blue");
+    const [scale, setScale] = createSignal(saved.scale ?? 1);
     const [status, setStatus] = createSignal("idle");
     const [errorMsg, setErrorMsg] = createSignal("");
     const [errorLink, setErrorLink] = createSignal(false);
@@ -191,10 +210,15 @@ export default function Generator() {
         debounceId = setTimeout(() => generate(), 50);
     }
 
+    function saveSettings() {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify({ font: font(), color: color(), scale: scale() }));
+    }
+
     const revalidate = (apply) => {
         clearTimeout(debounceId);
         genId++;
         apply();
+        saveSettings();
         generate();
     };
 
@@ -276,6 +300,7 @@ export default function Generator() {
                         <div class="m3-field" data-empty={text() === ""}>
                             <textarea id="text-input" placeholder=" " required value={text()} onInput={onTextInput} />
                             <label for="text-input">Your text</label>
+                            <span class="char-count" aria-live="polite">{text().length} characters</span>
                         </div>
 
                         <div>

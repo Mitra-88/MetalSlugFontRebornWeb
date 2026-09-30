@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "material-icons/iconfont/round.css";
 
 @view-transition {
     navigation: auto;
@@ -618,6 +619,16 @@ body {
 
 .m3-field textarea::placeholder {
     color: transparent;
+}
+
+.m3-field .char-count {
+    position: absolute;
+    right: 12px;
+    bottom: 8px;
+    font-size: 0.72rem;
+    color: var(--m3-on-surface-variant);
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
 }
 
 .m3-field label {

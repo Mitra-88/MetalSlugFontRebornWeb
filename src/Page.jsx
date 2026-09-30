@@ -1,5 +1,5 @@
-import { For, Show, createSignal } from "solid-js";
-import { ArrowLeft, Check, Moon, Palette, Sun } from "lucide-solid";
+import { For, Show, createSignal, onMount, onCleanup } from "solid-js";
+import { ArrowLeft, Check, Moon, Palette, Sun } from "./lib/icons.jsx";
 
 export const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
@@ -41,6 +41,19 @@ function withThemeTransition(apply) {
 
 export function ThemeToggle() {
     const [theme, setTheme] = createSignal(document.documentElement.dataset.theme === "light" ? "light" : "dark");
+
+    onMount(() => {
+        const scheme = window.matchMedia("(prefers-color-scheme: light)");
+        const onChange = (e) => {
+            if (localStorage.getItem("msfb-theme")) return;
+            const next = e.matches ? "light" : "dark";
+            document.documentElement.dataset.theme = next;
+            applyThemeColorMeta(next);
+            setTheme(next);
+        };
+        scheme.addEventListener("change", onChange);
+        onCleanup(() => scheme.removeEventListener("change", onChange));
+    });
 
     const toggle = () => {
         const next = theme() === "dark" ? "light" : "dark";
