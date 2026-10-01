@@ -2,9 +2,11 @@
 
 Web app version of [MetalSlugFontReborn](https://github.com/Mitra-88/MetalSlugFontReborn). _This branch reimplements it to run entirely client-side, rebuilt with Solid.js, Vite and Tailwind CSS, styled after Material Design 3_
 
+> ❄️ **Freeze mode.** This Solid 1.9 edition is complete and deployed, but feature frozen: no new development happens here. All active work now happens in the [Solid 2 repository](https://github.com/Mitra-88/MetalSlugFontRebornSolid2).
+
 ## 🚀 Demo
 
-Visit the live instance: [https://vermeil.pythonanywhere.com](https://vermeil.pythonanywhere.com) or [https://metalslugfontrebornweb.mitra88dev.workers.dev/](https://metalslugfontrebornweb.mitra88dev.workers.dev/)
+Visit the live instance: [https://metalslugfontrebornweb.mitra88dev.workers.dev/](https://metalslugfontrebornweb.mitra88dev.workers.dev/)
 
 ## ✨ Highlights
 

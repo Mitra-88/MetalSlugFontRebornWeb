@@ -145,7 +145,7 @@ UI state is one `status` signal (`idle | loading | success | error`). The canvas
 
 ## Gotchas & quirks
 
-- Solid 1.9 stable is deliberate on this branch: it is the stable-line edition. The Solid 2.0 RC + TypeScript edition is maintained separately at github.com/Mitra-88/MetalSlugFontRebornSolid2 (its Solid 2 gotchas live in that repo AGENTS.md). Do not port RC toolchain changes back here.
+- This branch is in freeze mode: maintenance and critical fixes only, no new features. The active edition is the standalone Solid 2 repo. The Solid 2.0 RC + TypeScript edition is maintained separately at github.com/Mitra-88/MetalSlugFontRebornSolid2 (its Solid 2 gotchas live in that repo AGENTS.md). Do not port RC toolchain changes back here.
 - lucide-solid 1.x dropped brand icons, so the GitHub footer link is plain text and the mascot is the bundled webp.
 - Do not conditionally mount the preview canvas. `<Show>` around it desynced the ref during the loading overlay and the draw landed on a detached canvas (empty preview at default 300×150). Overlays over an always-mounted canvas are the pattern.
 - The floating field label needs its opaque background: it sits on the field border and would show the border line through the text otherwise.
