@@ -189,7 +189,7 @@ RTK (`rtk`) is installed and available on PATH. Use RTK commands whenever an equ
 - `curl ...` → `rtk curl ...`
 - `wget ...` → `rtk wget ...`
 
-Maven has no RTK equivalent — run `mvn` normally.
+Maven has no RTK equivalent : run `mvn` normally.
 
 ### Useful specialized commands
 
@@ -203,6 +203,6 @@ Do not blindly replace every command with RTK; if RTK's filtering could hide inf
 
 ### On this machine
 
-- ZCode's shell is **Git Bash** (win32), not PowerShell — invoke `rtk` normally, never `.\rtk.exe`.
+- ZCode's shell is **Git Bash** (win32), not PowerShell : invoke `rtk` normally, never `.\rtk.exe`.
 - Installed at `C:\Program Files\rtk-x86_64-pc-windows-msvc\rtk.exe` and on the persisted user PATH.
-- Shell env vars don't persist between Bash calls, so `export PATH=...` won't stick. If plain `rtk` isn't found (e.g. ZCode was launched before the PATH entry was added — inherited env is stale until ZCode restarts), call it by absolute path `"/c/Program Files/rtk-x86_64-pc-windows-msvc/rtk.exe"` or fall back to the normal command.
+- Shell env vars don't persist between Bash calls, so `export PATH=...` won't stick. If plain `rtk` isn't found (e.g. ZCode was launched before the PATH entry was added : inherited env is stale until ZCode restarts), call it by absolute path `"/c/Program Files/rtk-x86_64-pc-windows-msvc/rtk.exe"` or fall back to the normal command.

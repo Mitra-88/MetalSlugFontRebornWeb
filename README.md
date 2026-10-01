@@ -16,7 +16,7 @@ Visit the live instance: [https://vermeil.pythonanywhere.com](https://vermeil.py
 
 ## 🌿 Branches
 
-- `rewrite/solid-vite` — Solid 1.9, plain JavaScript. Stable line (this branch).
+- `rewrite/solid-vite` : Solid 1.9, plain JavaScript. Stable line (this branch).
 - The Solid 2 (TypeScript) edition has moved to its own repository: [MetalSlugFontRebornSolid2](https://github.com/Mitra-88/MetalSlugFontRebornSolid2).
 
 The Material 3 UI, profiler and feature set are identical in both.
@@ -53,7 +53,7 @@ The Material 3 UI, profiler and feature set are identical in both.
 
 ### Prerequisites
 
-- Node.js 20.19+ or 22.12+
+- Node.js 24.21.0 or newer (both branches pin engines to this version)
 
 ### Setup
 
